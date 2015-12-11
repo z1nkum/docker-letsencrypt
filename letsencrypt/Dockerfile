@@ -1,6 +1,6 @@
 FROM nginx
 
-RUN apt-get update && apt-get install -y git
+RUN apt-get update && apt-get install -y git wget
 
 RUN mkdir -p /letsencrypt/challenges/.well-known/acme-challenge
 RUN git clone https://github.com/letsencrypt/letsencrypt /letsencrypt/app
@@ -11,13 +11,23 @@ RUN ./letsencrypt-auto; exit 0
 
 RUN echo "OK" > /letsencrypt/challenges/.well-known/acme-challenge/health
 
+# Install kubectl
+RUN wget https://storage.googleapis.com/kubernetes-release/release/v1.0.1/bin/linux/amd64/kubectl
+RUN chmod +x kubectl
+RUN mv kubectl /usr/local/bin/
 
+# Add our nginx config for routing through to the challenge results
 RUN rm /etc/nginx/conf.d/*.conf
 ADD nginx/nginx.conf /etc/nginx/
 ADD nginx/letsencrypt.conf /etc/nginx/conf.d/
-ADD update_certs.sh /letsencrypt/
+
+# Add some helper scripts for getting and saving scripts later
+ADD fetch_certs.sh /letsencrypt/
+ADD save_certs.sh /letsencrypt/
 
 ADD nginx/letsencrypt.conf /etc/nginx/snippets/letsencrypt.conf
+
+RUN ln -s /root/.local/share/letsencrypt/bin/letsencrypt /usr/local/bin/letsencrypt
 
 WORKDIR /letsencrypt
 CMD ["nginx", "-g", "daemon off;"]
