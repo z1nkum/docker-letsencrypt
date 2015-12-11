@@ -1,6 +1,6 @@
 FROM nginx
 
-RUN apt-get update && apt-get install -y git wget
+RUN apt-get update && apt-get install -y git wget cron
 
 RUN mkdir -p /letsencrypt/challenges/.well-known/acme-challenge
 RUN git clone https://github.com/letsencrypt/letsencrypt /letsencrypt/app
@@ -24,10 +24,12 @@ ADD nginx/letsencrypt.conf /etc/nginx/conf.d/
 # Add some helper scripts for getting and saving scripts later
 ADD fetch_certs.sh /letsencrypt/
 ADD save_certs.sh /letsencrypt/
+ADD start.sh /letsencrypt/
 
 ADD nginx/letsencrypt.conf /etc/nginx/snippets/letsencrypt.conf
 
 RUN ln -s /root/.local/share/letsencrypt/bin/letsencrypt /usr/local/bin/letsencrypt
 
 WORKDIR /letsencrypt
-CMD ["nginx", "-g", "daemon off;"]
+
+ENTRYPOINT ./start.sh
