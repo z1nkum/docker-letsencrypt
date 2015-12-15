@@ -16,9 +16,9 @@ line="0 0 2 * * DOMAINS='$DOMAINS' /letsencrypt/save_certs.sh"
 
 crontab -l
 
-if [ "$ENV" -eq "STAGING" ]; then
-    echo "server = https://acme-staging.api.letsencrypt.org/directory" >> /etc/letsencrypt/cli.ini
-fi    
+if [ -n "${LETSENCRYPT_ENDPOINT+1}" ]; then
+    echo "server = $LETSENCRYPT_ENDPOINT" >> /etc/letsencrypt/cli.ini
+fi
 
 # Start cron
 echo "Starting cron..."
