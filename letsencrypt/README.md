@@ -25,3 +25,12 @@ kubectl exec -it <container> /bin/bash -- -c 'EMAIL=fred@fred.com DOMAINS=exampl
 ### Save the set of certificates as a secret
 
 kubectl exec -it <container> /bin/bash -- -c 'DOMAINS=example.com foo.example.com ./save_certs.sh'
+
+
+## Environment variables:
+
+ - EMAIL - the email address to obtain certificates on behalf of.
+ - DOMAINS - a space separated list of domains to obtain a certificate for.
+ - ENV
+   - If "staging" this will create dummy certificates using the acme-staging.api
+     end point provided by letsencrypt.
