@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # $DOMAINS should contain all domains that this container is responsible for
-# renewing.
+# renewing. The first one dictates where the cert will live.
 
-# Inside /etc/letsencrypt/live/z.ployst.com we have:
+# Inside /etc/letsencrypt/live/<domain> we have:
 #
 # cert.pem  chain.pem  fullchain.pem  privkey.pem
 #
@@ -12,16 +12,18 @@
 
 CERT_LOCATION='/etc/letsencrypt/live'
 
-for i in "${DOMAINS[@]}"
-do
-    CERT=$(cat $CERT_LOCATION/$i/fullchain.pem | base64 --wrap=0)
-    KEY=$(cat $CERT_LOCATION/$i/privkey.pem | base64 --wrap=0)
-    DHPARAM=$(openssl dhparam 2048 | base64 --wrap=0)
-    SECRET_NAME="certs-${i}"
+DOMAINS=($DOMAINS)
 
-    kubectl get secrets $SECRET_NAME && ACTION=replace || ACTION=create;
+DOMAIN=${DOMAINS[0]}
 
-    cat << EOF | kubectl $ACTION -f -
+CERT=$(cat $CERT_LOCATION/$DOMAIN/fullchain.pem | base64 --wrap=0)
+KEY=$(cat $CERT_LOCATION/$DOMAIN/privkey.pem | base64 --wrap=0)
+DHPARAM=$(openssl dhparam 2048 | base64 --wrap=0)
+SECRET_NAME="certs-${DOMAIN}"
+
+kubectl get secrets $SECRET_NAME && ACTION=replace || ACTION=create;
+
+cat << EOF | kubectl $ACTION -f -
 {
  "apiVersion": "v1",
  "kind": "Secret",
@@ -36,4 +38,3 @@ do
  }
 }
 EOF
-done
