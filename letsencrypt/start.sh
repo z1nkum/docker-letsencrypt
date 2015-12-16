@@ -8,7 +8,7 @@ echo "EMAIL: " $EMAIL
 echo "RC_NAMES: " $RC_NAMES
 # On the first of each month at midnight, fetch and save certs + restart pods.
 
-line="0 0 1 * * RC_NAMES='$RC_NAMES' DOMAINS='$DOMAINS' EMAIL=$EMAIL /letsencrypt/cert_run.sh"
+line="0 0 1 * * RC_NAMES='$RC_NAMES' DOMAINS='$DOMAINS' EMAIL=$EMAIL /letsencrypt/refresh_certs.sh"
 (crontab -u root -l; echo "$line" ) | crontab -u root -
 
 
