@@ -35,3 +35,5 @@ kubectl exec -it <container> /bin/bash -- -c 'DOMAINS=example.com foo.example.co
    - If set, will be used to populate the /etc/letsencrypt/cli.ini file with
      the given server value. For testing use
      https://acme-staging.api.letsencrypt.org/directory
+ - RC_NAMES - a space separated list of RC's whose pods to destroy after a
+   certificate save.

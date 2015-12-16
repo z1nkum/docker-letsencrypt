@@ -24,6 +24,8 @@ ADD nginx/letsencrypt.conf /etc/nginx/conf.d/
 # Add some helper scripts for getting and saving scripts later
 ADD fetch_certs.sh /letsencrypt/
 ADD save_certs.sh /letsencrypt/
+ADD recreate_pods.sh /letsencrypt/
+ADD cert_run.sh /letsencrypt/
 ADD start.sh /letsencrypt/
 
 ADD nginx/letsencrypt.conf /etc/nginx/snippets/letsencrypt.conf

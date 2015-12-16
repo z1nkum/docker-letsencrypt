@@ -5,16 +5,12 @@
 echo "Configuring cron..."
 echo "DOMAINS: " $DOMAINS
 echo "EMAIL: " $EMAIL
+echo "RC_NAMES: " $RC_NAMES
+# On the first of each month at midnight, fetch and save certs + restart pods.
 
-# Fetch new certificates on the first of each month at midnight
-line="0 0 1 * * DOMAINS='$DOMAINS' EMAIL=$EMAIL /letsencrypt/fetch_certs.sh"
+line="0 0 1 * * RC_NAMES='$RC_NAMES' DOMAINS='$DOMAINS' EMAIL=$EMAIL /letsencrypt/cert_run.sh"
 (crontab -u root -l; echo "$line" ) | crontab -u root -
 
-# Save new certificates on the second of each month at midnight
-line="0 0 2 * * DOMAINS='$DOMAINS' /letsencrypt/save_certs.sh"
-(crontab -u root -l; echo "$line" ) | crontab -u root -
-
-crontab -l
 
 if [ -n "${LETSENCRYPT_ENDPOINT+1}" ]; then
     echo "server = $LETSENCRYPT_ENDPOINT" >> /etc/letsencrypt/cli.ini
