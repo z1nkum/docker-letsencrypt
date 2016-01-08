@@ -37,3 +37,4 @@ kubectl exec -it <container> /bin/bash -- -c 'DOMAINS=example.com foo.example.co
      https://acme-staging.api.letsencrypt.org/directory
  - RC_NAMES - a space separated list of RC's whose pods to destroy after a
    certificate save.
+ - SECRET_NAME - the name to save the secrets under
