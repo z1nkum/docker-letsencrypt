@@ -1,6 +1,6 @@
 FROM nginx
 
-RUN apt-get update && apt-get install -y git wget cron
+RUN apt-get update && apt-get install -y git wget cron bc
 
 RUN mkdir -p /letsencrypt/challenges/.well-known/acme-challenge
 RUN git clone https://github.com/letsencrypt/letsencrypt /letsencrypt/app
