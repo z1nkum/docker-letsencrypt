@@ -16,6 +16,6 @@ RC_NAMES=(${RC_NAMES})
 
 for RC_NAME in "${RC_NAMES[@]}"
 do
-    IMAGE=$(kubectl get rc nginx-ssl-proxy-api -o=template --template='{{index .spec.template.spec.containers 0 "image"}}')
+    IMAGE=$(kubectl get rc $RC_NAME -o=template --template='{{index .spec.template.spec.containers 0 "image"}}')
     kubectl rolling-update $RC_NAME --image=$IMAGE --update-period=5s
 done
