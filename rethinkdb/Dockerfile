@@ -14,12 +14,10 @@
 
 FROM rethinkdb:2.2.4
 
-MAINTAINER BinZhao <wo@zhaob.in>
-
 RUN apt-get update && \
     apt-get install -yq curl && \
     rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && \
-    curl -L http://stedolan.github.io/jq/download/linux64/jq > /usr/bin/jq && \
+    curl -L https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 > /usr/bin/jq && \
     chmod u+x /usr/bin/jq
 
 COPY ./run.sh /usr/bin/run.sh
