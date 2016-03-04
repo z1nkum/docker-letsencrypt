@@ -3,6 +3,7 @@
 A docker image suitable for requesting new certifcates from letsencrypt,
 and storing them in a secret on kubernetes.
 
+Available on docker hub as [ployst/letsencrypt](https://hub.docker.com/r/ployst/letsencrypt)
 
 ## Purpose
 
