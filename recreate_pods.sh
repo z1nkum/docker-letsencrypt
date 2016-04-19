@@ -1,21 +1,21 @@
 #!/bin/bash
 
-# Delete all pods that are owned by this RC.
-#  - Get the labels that the RC is selecting based on
-#  - Delete all the pods with that set of labels.
-#  - The RC will then recreate the pods.
-#
+# Update the required env vars for the first pod in a Deployments.
+# This will kick off a rolling update.
 # Do this so that the secrets can be remounted.
 
-if [ -z "$RC_NAMES" ]; then
-    echo "WARNING: RC_NAMES not provided. Secret changes may not be reflected."
+if [ -z "$DEPLOYMENTS" ]; then
+    echo "WARNING: DEPLOYMENTS not provided. Secret changes may not be reflected."
     exit
 fi
 
-RC_NAMES=(${RC_NAMES})
+DEPLOYMENTS=(${DEPLOYMENTS})
+DATE=$(date)
 
-for RC_NAME in "${RC_NAMES[@]}"
+for DEPLOYMENT in "${DEPLOYMENTS[@]}"
 do
-    IMAGE=$(kubectl get rc $RC_NAME -o=template --template='{{index .spec.template.spec.containers 0 "image"}}')
-    kubectl rolling-update $RC_NAME --image=$IMAGE --update-period=5s
+    NAME=$(kubectl get deployments $DEPLOYMENT -o=template --template='{{index .spec.template.spec.containers 0 "name"}}')
+    PATCH=$(NAME=$NAME DATE=$DATE echo "{\"spec\": {\"template\": {\"spec\": {\"containers\": [{\"name\": \"$NAME\", \"env\": [{\"name\": \"LETSENCRYPT_CERT_REFRESH\", \"value\": \"$DATE\"}]}]}}}}")
+    echo "PATCHING ${DEPLOYMENT}: ${PATCH}"
+    kubectl patch deployment $DEPLOYMENT --type=strategic -p "$PATCH"
 done

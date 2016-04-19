@@ -36,8 +36,8 @@ kubectl exec -it <container> /bin/bash -- -c 'DOMAINS=example.com foo.example.co
    - If set, will be used to populate the /etc/letsencrypt/cli.ini file with
      the given server value. For testing use
      https://acme-staging.api.letsencrypt.org/directory
- - RC_NAMES - a space separated list of RC's whose pods to destroy after a
-   certificate save.
+ - DEPLOYMENTS - a space separated list of deployments whose pods should be
+   refreshed after a certificate save
  - SECRET_NAME - the name to save the secrets under
  - CRON_FREQUENCY - the 5-part frequency of the cron job. Default is a random
    time in the range `0-59 0-23 1-27 * *`
