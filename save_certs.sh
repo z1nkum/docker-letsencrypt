@@ -33,7 +33,7 @@ cat << EOF | kubectl $ACTION -f -
  "kind": "Secret",
  "metadata": {
    "name": "$SECRET_NAME",
-   "namespace": "default"
+   "namespace": "${NAMESPACE:-default}"
  },
  "data": {
    "proxycert": "$CERT",

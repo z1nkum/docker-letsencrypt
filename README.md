@@ -1,6 +1,6 @@
 # letsencrypt-kubernetes
 
-A docker image suitable for requesting new certifcates from letsencrypt,
+A docker image suitable for requesting new certificates from letsencrypt,
 and storing them in a secret on kubernetes.
 
 Available on docker hub as [ployst/letsencrypt](https://hub.docker.com/r/ployst/letsencrypt)
@@ -20,13 +20,21 @@ To provide an application that owns certificate requesting and storing.
 
 Once this container is running you can generate new certificates using:
 
-kubectl exec -it <container> /bin/bash -- -c 'EMAIL=fred@fred.com DOMAINS=example.com foo.example.com ./fetch_certs.sh'
-
+```
+kubectl exec -it <pod> -- bash -c 'EMAIL=fred@fred.com DOMAINS=example.com foo.example.com ./fetch_certs.sh'
+```
 
 ### Save the set of certificates as a secret
 
-kubectl exec -it <container> /bin/bash -- -c 'DOMAINS=example.com foo.example.com ./save_certs.sh'
+```
+kubectl exec -it <pod> -- bash -c 'DOMAINS=example.com foo.example.com ./save_certs.sh'
+```
 
+### Refresh the certificates
+
+```
+kubectl exec -it <pod> -- bash -c 'EMAIL=fred@fred.com DOMAINS=example.com foo.example.com SECRET_NAME=foo DEPLOYMENTS=bar ./refresh_certs.sh'
+```
 
 ## Environment variables:
 
@@ -39,5 +47,6 @@ kubectl exec -it <container> /bin/bash -- -c 'DOMAINS=example.com foo.example.co
  - DEPLOYMENTS - a space separated list of deployments whose pods should be
    refreshed after a certificate save
  - SECRET_NAME - the name to save the secrets under
+ - NAMESPACE - the namespace under which the secrets should be available
  - CRON_FREQUENCY - the 5-part frequency of the cron job. Default is a random
    time in the range `0-59 0-23 1-27 * *`
