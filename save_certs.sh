@@ -27,13 +27,15 @@ DHPARAM=$(openssl dhparam 2048 | base64 --wrap=0)
 
 kubectl get secrets $SECRET_NAME && ACTION=replace || ACTION=create;
 
+NAMESPACE=${NAMESPACE:-default}
+
 cat << EOF | kubectl $ACTION -f -
 {
  "apiVersion": "v1",
  "kind": "Secret",
  "metadata": {
    "name": "$SECRET_NAME",
-   "namespace": "${NAMESPACE:-default}"
+   "namespace": "$NAMESPACE"
  },
  "data": {
    "proxycert": "$CERT",

@@ -1,4 +1,6 @@
 
+ - NAMESPACE env var support added
+
 # 0.0.7
 
  - Upgrade kubectl so that deployments work
