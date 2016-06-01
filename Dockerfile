@@ -3,7 +3,7 @@ FROM nginx
 RUN apt-get update && apt-get install -y git wget cron bc
 
 RUN mkdir -p /letsencrypt/challenges/.well-known/acme-challenge
-RUN git clone https://github.com/letsencrypt/letsencrypt /letsencrypt/app
+RUN git clone https://github.com/certbot/certbot /letsencrypt/app
 WORKDIR /letsencrypt/app
 RUN ./letsencrypt-auto; exit 0
 
