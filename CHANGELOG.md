@@ -1,3 +1,7 @@
+# 0.0.9
+
+ - NAMESPACE bugfixes
+ 
 # 0.0.8
 
  - NAMESPACE env var support added
