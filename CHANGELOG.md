@@ -1,3 +1,7 @@
+# 0.1.0
+
+ - Upgrade kubectl to 1.3.6
+ - 
 # 0.0.9
 
  - NAMESPACE bugfixes
