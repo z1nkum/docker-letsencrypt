@@ -26,6 +26,7 @@ KEY=$(cat $CERT_LOCATION/$DOMAIN/privkey.pem | base64 --wrap=0)
 DHPARAM=$(openssl dhparam 2048 | base64 --wrap=0)
 
 NAMESPACE=${NAMESPACE:-default}
+TYPE=${TYPE:-Opaque}
 
 kubectl get secrets --namespace $NAMESPACE $SECRET_NAME && ACTION=replace || ACTION=create;
 
@@ -43,6 +44,7 @@ cat << EOF | kubectl $ACTION -f -
    "tls.crt": "$CERT",
    "tls.key": "$KEY",   
    "dhparam": "$DHPARAM"
- }
+ },
+ "type": "$TYPE"
 }
 EOF
