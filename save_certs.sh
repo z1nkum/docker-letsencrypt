@@ -23,6 +23,7 @@ DOMAIN=${DOMAINS[0]}
 
 CERT=$(cat $CERT_LOCATION/$DOMAIN/fullchain.pem | base64 --wrap=0)
 KEY=$(cat $CERT_LOCATION/$DOMAIN/privkey.pem | base64 --wrap=0)
+PEM=$(cat $CERT_LOCATION/$DOMAIN/fullchain.pem $CERT_LOCATION/$DOMAIN/privkey.pem | base64 --wrap=0)
 DHPARAM=$(openssl dhparam 2048 | base64 --wrap=0)
 
 NAMESPACE=${NAMESPACE:-default}
@@ -42,7 +43,8 @@ cat << EOF | kubectl $ACTION -f -
    "proxycert": "$CERT",
    "proxykey": "$KEY",
    "tls.crt": "$CERT",
-   "tls.key": "$KEY",   
+   "tls.key": "$KEY",
+   "tls.pem": "$PEM",
    "dhparam": "$DHPARAM"
  },
  "type": "$TYPE"
